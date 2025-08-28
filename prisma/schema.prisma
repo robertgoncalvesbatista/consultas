@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int              @id @default(autoincrement())
+  cpf            String           @unique
+  name           String
+  email          String           @unique
+  password       String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  RequestPayment RequestPayment[]
+}
+
+model RequestPayment {
+  id        Int         @id @default(autoincrement())
+  type      TypePayment @default(PIX)
+  amount    Decimal     @db.Decimal(10, 2)
+  userId    Int
+  user      User        @relation(fields: [userId], references: [id])
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model CadastroPessoaFisica {
+  id                 Int      @id @default(autoincrement())
+  cpf                String   @unique
+  nome               String
+  sexo               String
+  dataNascimento     DateTime
+  nomeMae            String
+  idade              Int
+  signo              String
+  rendaEstimada      Decimal  @db.Decimal(10, 2)
+  rendaFaixaSalarial String
+  telefones          Json
+  enderecos          Json
+  emails             Json
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+enum TypePayment {
+  PIX
+  CREDIT_CARD
+}
