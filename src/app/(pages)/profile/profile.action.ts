@@ -4,9 +4,9 @@ import { hashSync } from "bcrypt-ts";
 
 import db from "@/lib/db";
 
-import { UserValidator } from "./user.validation";
+import { ProfileValidator } from "./profile.validation";
 
-export async function updateUserAction(data: UserValidator, session: any) {
+export async function updateUserAction(data: ProfileValidator, session: any) {
   const user = await db.user.findUnique({
     where: { email: session?.user?.email ?? "" },
   });

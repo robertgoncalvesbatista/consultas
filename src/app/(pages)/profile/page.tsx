@@ -14,7 +14,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 
-import { ProfileForm } from "./ProfileForm";
+import { ProfileForm } from "./profile-form";
 
 async function Page() {
   const session = await auth();

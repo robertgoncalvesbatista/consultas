@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const userValidation = z
+export const signupValidation = z
   .object({
     name: z.string().optional(),
     email: z.email().optional(),
@@ -28,4 +28,4 @@ export const userValidation = z
     }
   );
 
-export type UserValidator = z.infer<typeof userValidation>;
+export type SignupValidator = z.infer<typeof signupValidation>;

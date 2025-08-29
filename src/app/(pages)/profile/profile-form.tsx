@@ -36,37 +36,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { updateUserAction } from "./updateUserAction";
-import { userValidation, UserValidator } from "./user.validation";
+import { useCPF } from "@/hooks/use-cpf";
 
-// Função para formatar CPF
-function formatCPF(value: string): string {
-  const numbers = value.replace(/\D/g, "");
-  const match = numbers.match(/^(\d{0,3})(\d{0,3})(\d{0,3})(\d{0,2})$/);
-
-  if (!match) return value;
-
-  const [, p1, p2, p3, p4] = match;
-
-  if (p4) return `${p1}.${p2}.${p3}-${p4}`;
-  if (p3) return `${p1}.${p2}.${p3}`;
-  if (p2) return `${p1}.${p2}`;
-  if (p1) return p1;
-
-  return "";
-}
+import { updateUserAction } from "./profile.action";
+import { profileValidation, ProfileValidator } from "./profile.validation";
 
 type Props = {
   session: Session;
 };
 
 function ProfileForm({ session }: Props) {
-  const [showPasswordFields, setShowPasswordFields] = useState(false);
-
+  const { onChangeCPF } = useCPF();
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<UserValidator>({
-    resolver: zodResolver(userValidation),
+  const [showPasswordFields, setShowPasswordFields] = useState(false);
+
+  const form = useForm<ProfileValidator>({
+    resolver: zodResolver(profileValidation),
     defaultValues: {
       name: session?.user?.name || "",
       cpf: "",
@@ -76,7 +62,7 @@ function ProfileForm({ session }: Props) {
     },
   });
 
-  const onSubmit = async (data: UserValidator) => {
+  const onSubmit = async (data: ProfileValidator) => {
     startTransition(async () => {
       try {
         await updateUserAction(data, session);
@@ -84,14 +70,6 @@ function ProfileForm({ session }: Props) {
         console.log(error.message);
       }
     });
-  };
-
-  const handleCPFChange = (
-    value: string,
-    onChange: (value: string) => void
-  ) => {
-    const formatted = formatCPF(value);
-    onChange(formatted);
   };
 
   if (form.formState.isLoading) {
@@ -129,7 +107,7 @@ function ProfileForm({ session }: Props) {
     <div className="px-4 py-8">
       <Card className="overflow-hidden max-w-2xl w-full mx-auto shadow-lg">
         <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
             <CardHeader className="border-b pb-4">
               <CardTitle className="flex items-center gap-2">
                 <UserIcon className="h-5 w-5" />
@@ -176,9 +154,9 @@ function ProfileForm({ session }: Props) {
                         placeholder="000.000.000-00"
                         disabled={isPending}
                         {...field}
-                        onChange={(e) =>
-                          handleCPFChange(e.target.value, field.onChange)
-                        }
+                        onChange={(e) => {
+                          onChangeCPF(e.target.value, field.onChange);
+                        }}
                         maxLength={14}
                       />
                     </FormControl>
@@ -241,7 +219,7 @@ function ProfileForm({ session }: Props) {
                             <Input
                               type="password"
                               autoComplete="new-password"
-                              placeholder="••••••••"
+                              placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
                               disabled={isPending}
                               {...field}
                             />
@@ -261,7 +239,7 @@ function ProfileForm({ session }: Props) {
                             <Input
                               type="password"
                               autoComplete="new-password"
-                              placeholder="••••••••"
+                              placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
                               disabled={isPending}
                               {...field}
                             />
