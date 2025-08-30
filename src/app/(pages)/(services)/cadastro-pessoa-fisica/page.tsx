@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 
-import { Saldo } from "@/components/saldo";
+import { Balance } from "@/components/balance";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,7 +14,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 
-import CadastroPessoaFisica from "./CadastroPessoaFisica";
+import CadastroPessoaFisica from "./cadastro-pessoa-fisica-form";
 
 async function Page() {
   const session = await auth();
@@ -48,7 +48,7 @@ async function Page() {
           </Breadcrumb>
         </div>
 
-        <Saldo valor={100} />
+        <Balance valor={100} />
       </header>
 
       <CadastroPessoaFisica session={session} />

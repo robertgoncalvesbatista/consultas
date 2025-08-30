@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 
-import { Saldo } from "@/components/saldo";
+import { Balance } from "@/components/balance";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -48,7 +48,7 @@ async function Page() {
           </Breadcrumb>
         </div>
 
-        <Saldo valor={100} />
+        <Balance valor={100} />
       </header>
 
       <ProfileForm session={session} />

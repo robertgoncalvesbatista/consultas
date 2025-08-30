@@ -2,11 +2,11 @@ import { Wallet } from "lucide-react";
 
 import { Badge } from "./ui/badge";
 
-type SaldoProps = {
+type BalanceProps = {
   valor: number;
 };
 
-export function Saldo({ valor }: SaldoProps) {
+export function Balance({ valor }: BalanceProps) {
   return (
     <Badge
       variant="default"

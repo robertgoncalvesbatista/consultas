@@ -5,14 +5,8 @@ import { parse } from "date-fns";
 
 import db from "@/lib/db";
 
-export async function cadastroPessoaFisicaAction(
-  _prevState: unknown,
-  formData: FormData
-) {
+export async function cadastroPessoaFisicaAction(data: { cpf: string }) {
   try {
-    const entries = Array.from(formData.entries());
-    const data = Object.fromEntries(entries) as { cpf: string };
-
     const cpfSearch = data.cpf.replace(/\D/g, "").trim();
 
     const cadastroPessoaFisica = await db.cadastroPessoaFisica.findFirst({
