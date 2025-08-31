@@ -28,6 +28,7 @@ export async function billingAction(data: { valor: string }) {
         requestNumber: Date.now(),
         dueDate: format(addDays(new Date(), 1), "yyyy-MM-dd"),
         amount: data.valor,
+        callbackUrl: process.env.CALLBACK_SUITPAY + "/api/payment-method/pix",
         client: {
           name: session?.user?.name ?? "",
           email: session?.user?.email ?? "",

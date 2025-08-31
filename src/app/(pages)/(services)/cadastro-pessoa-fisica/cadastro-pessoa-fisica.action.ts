@@ -18,7 +18,7 @@ export async function cadastroPessoaFisicaAction(data: { cpf: string }) {
         "https://apiv3.directd.com.br/api/CadastroPessoaFisica",
         {
           params: {
-            TOKEN: "43A15BBB-6C1C-4987-AE6C-05EC14F00865",
+            TOKEN: process.env.TOKEN_DIRECT_API,
             CPF: cpfSearch,
           },
         }

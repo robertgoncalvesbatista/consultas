@@ -8,45 +8,48 @@ datasource db {
 }
 
 model User {
-  id             Int              @id @default(autoincrement())
-  cpf            String           @unique
-  name           String
-  email          String           @unique
-  password       String
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  RequestPayment RequestPayment[]
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  cpf       String   @unique
+  account   Account?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model RequestPayment {
-  id        Int         @id @default(autoincrement())
-  type      TypePayment @default(PIX)
-  amount    Decimal     @db.Decimal(10, 2)
-  userId    Int
-  user      User        @relation(fields: [userId], references: [id])
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+model Account {
+  id        Int      @id @default(autoincrement())
+  amount    Decimal  @db.Decimal(12, 2)
+  isMain    Boolean  @default(false)
+  userId    Int?     @unique
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model CadastroPessoaFisica {
-  id                 Int      @id @default(autoincrement())
-  cpf                String   @unique
-  nome               String
-  sexo               String
-  dataNascimento     DateTime
-  nomeMae            String
-  idade              Int
-  signo              String
-  rendaEstimada      Decimal  @db.Decimal(10, 2)
-  rendaFaixaSalarial String
-  telefones          Json
-  enderecos          Json
-  emails             Json
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-}
-
-enum TypePayment {
-  PIX
-  CREDIT_CARD
+  id                    Int      @id @default(autoincrement())
+  cpf                   String   @unique
+  nome                  String
+  sexo                  String
+  dataNascimento        DateTime
+  nomeMae               String
+  idade                 Int
+  signo                 String
+  telefones             Json
+  enderecos             Json
+  emails                Json
+  rendaEstimada         String
+  rendaFaixaSalarial    String
+  obito                 Boolean
+  nomePai               String
+  codigoCBO             String
+  cbo                   String
+  classeSocial          String
+  situacaoCadastral     String
+  dataSituacaoCadastral String
+  parentescos           Json
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 }
