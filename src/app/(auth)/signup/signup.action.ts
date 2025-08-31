@@ -38,10 +38,10 @@ export async function signupAction(data: SignupValidator) {
   // Se não existir, cria o usuário
   await db.user.create({
     data: {
-      name: data.name,
-      email: data.email,
-      cpf: data.cpf,
-      password: hashSync(data.password),
+      name: data.name ?? "",
+      email: data.email ?? "",
+      cpf: data.cpf ?? "",
+      password: hashSync(data.password ?? ""),
     },
   });
 

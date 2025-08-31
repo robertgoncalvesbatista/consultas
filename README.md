@@ -24,6 +24,6 @@ R$ 0,36
 Acordos de Leniência
 R$ 0,36
 
-# Taxa do Saas de consultas
+# Taxa do SaaS de consultas
 
 R$ 0,50

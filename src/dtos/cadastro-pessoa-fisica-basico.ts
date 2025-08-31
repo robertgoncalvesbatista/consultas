@@ -1,21 +1,20 @@
-export default class CadastroPessoaFisicaBasicoDTO {
-  constructor(
-    public readonly cpf: string,
-    public readonly nome: string,
-    public readonly sexo: string,
-    public readonly dataNascimento: string,
-    public readonly nomeMae: string,
-    public readonly idade: number,
-    public readonly signo: string,
-    public readonly telefones: TTelefone[],
-    public readonly enderecos: TEndereco[],
-    public readonly emails: TEmail[],
-    public readonly rendaEstimada: string,
-    public readonly rendaFaixaSalarial: string
-  ) {}
+import { CadastroPessoaFisicaBasico } from "@prisma/client";
+
+import BaseDTO from "./base";
+
+class CadastroPessoaFisicaBasicoBasicoDTO extends BaseDTO {
+  constructor(public readonly dto: CadastroPessoaFisicaBasico) {
+    super(dto);
+  }
+
+  public toObject(): CadastroPessoaFisicaBasico {
+    return this.dto;
+  }
 }
 
-type TTelefone = {
+export default CadastroPessoaFisicaBasicoBasicoDTO;
+
+export type TTelefone = {
   telefoneComDDD: string;
   telemarketingBloqueado: boolean;
   operadora: string;
@@ -23,7 +22,7 @@ type TTelefone = {
   whatsApp: boolean;
 };
 
-type TEndereco = {
+export type TEndereco = {
   logradouro: string;
   numero: string;
   complemento: string;
@@ -33,6 +32,6 @@ type TEndereco = {
   cep: string;
 };
 
-type TEmail = {
+export type TEmail = {
   enderecoEmail: string;
 };

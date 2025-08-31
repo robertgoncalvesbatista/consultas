@@ -7,39 +7,64 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum AccountEnum {
+  USER
+  SYSTEM
+  EXTERNAL
+}
+
 model User {
   id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  cpf       String   @unique
+  name      String   @db.VarChar(150)
+  email     String   @unique @db.VarChar(150)
+  password  String   @db.VarChar(150)
+  cpf       String   @unique @db.VarChar(11)
   account   Account?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Account {
-  id        Int      @id @default(autoincrement())
-  amount    Decimal  @db.Decimal(12, 2)
-  isMain    Boolean  @default(false)
-  userId    Int?     @unique
-  user      User?    @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int         @id @default(autoincrement())
+  amount      Decimal     @db.Decimal(12, 2)
+  typeAccount AccountEnum @default(USER)
+  userId      Int?        @unique
+  user        User?       @relation(fields: [userId], references: [id])
+  observation String      @db.VarChar(255)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
 
-model CadastroPessoaFisica {
+model CadastroPessoaFisicaBasico {
+  id                 Int      @id @default(autoincrement())
+  cpf                String   @unique
+  nome               String
+  sexo               String
+  dataNascimento     String
+  nomeMae            String
+  idade              Int
+  signo              String
+  telefones          Json[]
+  enderecos          Json[]
+  emails             Json[]
+  rendaEstimada      String
+  rendaFaixaSalarial String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model CadastroPessoaFisicaPlus {
   id                    Int      @id @default(autoincrement())
   cpf                   String   @unique
   nome                  String
   sexo                  String
-  dataNascimento        DateTime
+  dataNascimento        String
   nomeMae               String
   idade                 Int
   signo                 String
-  telefones             Json
-  enderecos             Json
-  emails                Json
+  telefones             Json[]
+  enderecos             Json[]
+  emails                Json[]
   rendaEstimada         String
   rendaFaixaSalarial    String
   obito                 Boolean
@@ -49,7 +74,7 @@ model CadastroPessoaFisica {
   classeSocial          String
   situacaoCadastral     String
   dataSituacaoCadastral String
-  parentescos           Json
+  parentescos           Json[]
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 }

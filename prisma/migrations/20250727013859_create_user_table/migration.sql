@@ -1,10 +1,10 @@
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "cpf" TEXT NOT NULL,
+    "name" VARCHAR(150) NOT NULL,
+    "email" VARCHAR(150) NOT NULL,
+    "password" VARCHAR(150) NOT NULL,
+    "cpf" VARCHAR(11) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

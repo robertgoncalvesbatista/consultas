@@ -4,10 +4,11 @@ import { useState, useTransition } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CadastroPessoaFisicaBasico } from "@prisma/client";
 
-import { format } from "date-fns";
-import { Session } from "next-auth";
+import { Search } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -15,38 +16,35 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-
-import { Button } from "@/components/ui/button";
 import {
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Loading } from "@/components/ui/loading";
+
+import CadastroPessoaFisicaBasicoDTO from "@/dtos/cadastro-pessoa-fisica-basico";
+
 import { useCPF } from "@/hooks/use-cpf";
-import { CreditCardIcon } from "lucide-react";
+
 import { cadastroPessoaFisicaAction } from "./cadastro-pessoa-fisica.action";
 import {
   cadastroPessoaFisicaValidation,
   CadastroPessoaFisicaValidator,
 } from "./cadastro-pessoa-fisica.validation";
 
-type Props = {
-  session: Session;
-};
+export default function CadastroPessoaFisicaForm() {
+  const [cadastroPessoaFisica, setCadastroPessoaFisica] =
+    useState<CadastroPessoaFisicaBasico>();
 
-export default function CadastroPessoaFisicaForm({ session }: Props) {
   const [isPending, startTransition] = useTransition();
-  const { onChangeCPF } = useCPF();
+  const { onChangeCPF, formatCPF } = useCPF();
 
   const form = useForm<CadastroPessoaFisicaValidator>({
     resolver: zodResolver(cadastroPessoaFisicaValidation),
   });
-
-  const [pessoaFisica, setPessoaFisica] = useState<any>();
 
   const onSubmit = async (data: CadastroPessoaFisicaValidator) => {
     startTransition(async () => {
@@ -55,108 +53,93 @@ export default function CadastroPessoaFisicaForm({ session }: Props) {
           cpf: data.cpf ?? "",
         });
 
-        setPessoaFisica(response);
-      } catch (error: any) {
-        console.log(error.message);
+        if (!response) {
+          throw new Error("Nenhum cadastro encontrado");
+        }
+
+        const newData = new CadastroPessoaFisicaBasicoDTO(response);
+        setCadastroPessoaFisica(newData.toObject());
+      } catch (error) {
+        console.log(error);
       }
     });
   };
 
   return (
     <div className="px-4">
-      <Card className="w-full shadow-md rounded-2xl border mx-auto">
+      <Card
+        className={`w-full shadow-md rounded-2xl border mx-auto${
+          !cadastroPessoaFisica && " gap-0"
+        }`}
+      >
         <CardHeader>
           <CardTitle className="text-xl font-bold">
-            Consulta de Pessoa Física
+            <span>Consulta de Pessoa Física</span>
           </CardTitle>
-          <CardDescription className="text-muted-foreground">
-            Consulte os dados de uma pessoa física
+          <CardDescription className="text-muted-foreground sm:flex sm:gap-2 sm:justify-between">
+            <span>Consulte os dados de uma pessoa física</span>
+            <FormProvider {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                noValidate
+                className="flex gap-2"
+              >
+                <FormField
+                  control={form.control}
+                  name="cpf"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          placeholder="000.000.000-00"
+                          disabled={isPending}
+                          {...field}
+                          onChange={(e) => {
+                            onChangeCPF(e.target.value, field.onChange);
+                          }}
+                          maxLength={14}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button type="submit">
+                  {!isPending && <Search />}
+                  {!!isPending && <Loading />}
+                </Button>
+              </form>
+            </FormProvider>
           </CardDescription>
         </CardHeader>
 
         <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-end gap-4">
-              <FormProvider {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
-                  <FormField
-                    control={form.control}
-                    name="cpf"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="flex items-center gap-2">
-                          <CreditCardIcon className="h-4 w-4" />
-                          CPF
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="000.000.000-00"
-                            disabled={isPending}
-                            {...field}
-                            onChange={(e) => {
-                              onChangeCPF(e.target.value, field.onChange);
-                            }}
-                            maxLength={14}
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          O CPF será formatado automaticamente
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <Button type="submit" className="w-full">
-                    {!isPending && "Pesquisar Pessoa Física"}
-                    {!!isPending && (
-                      <svg
-                        aria-hidden="true"
-                        className="inline w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                        viewBox="0 0 100 101"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                          fill="currentColor"
-                        />
-                        <path
-                          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                          fill="currentFill"
-                        />
-                      </svg>
-                    )}
-                  </Button>
-                </form>
-              </FormProvider>
-            </div>
-          </div>
-
-          {pessoaFisica && (
+          {cadastroPessoaFisica && (
             <div className="mt-6 space-y-6">
               {/* Dados principais */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
-                  { label: "Nome", value: pessoaFisica.nome || "-" },
-                  { label: "CPF", value: pessoaFisica.cpf },
-                  { label: "Sexo", value: pessoaFisica.sexo || "-" },
+                  { label: "Nome", value: cadastroPessoaFisica.nome || "-" },
+                  { label: "CPF", value: formatCPF(cadastroPessoaFisica.cpf) },
+                  { label: "Sexo", value: cadastroPessoaFisica.sexo || "-" },
                   {
                     label: "Data de Nascimento",
-                    value: format(pessoaFisica.dataNascimento, "dd/MM/yyyy"),
+                    value: cadastroPessoaFisica.dataNascimento.split(" ")[0],
                   },
-                  { label: "Nome da Mãe", value: pessoaFisica.nomeMae || "-" },
-                  { label: "Idade", value: pessoaFisica.idade || "-" },
-                  { label: "Signo", value: pessoaFisica.signo || "-" },
+                  {
+                    label: "Nome da Mãe",
+                    value: cadastroPessoaFisica.nomeMae || "-",
+                  },
+                  { label: "Idade", value: cadastroPessoaFisica.idade || "-" },
+                  { label: "Signo", value: cadastroPessoaFisica.signo || "-" },
                   {
                     label: "Renda Estimada",
-                    value: `R$ ${
-                      (pessoaFisica.rendaEstimada as unknown as number) || "-"
-                    }`,
+                    value: `R$ ${cadastroPessoaFisica.rendaEstimada || "-"}`,
                   },
                   {
                     label: "Faixa Salarial",
-                    value: pessoaFisica.rendaFaixaSalarial || "-",
+                    value: cadastroPessoaFisica.rendaFaixaSalarial || "-",
                   },
                 ].map(({ label, value }, idx) => (
                   <div key={idx}>
@@ -171,70 +154,63 @@ export default function CadastroPessoaFisicaForm({ session }: Props) {
               {/* Telefones, Endereços, Emails */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Telefones */}
-                {(pessoaFisica.telefones as Array<any>)?.length > 0 && (
+                {cadastroPessoaFisica.telefones.length > 0 && (
                   <div className="bg-muted p-4 rounded-xl shadow-sm">
                     <h3 className="font-semibold mb-2">Telefones</h3>
                     <div className="space-y-2 text-sm">
-                      {(pessoaFisica.telefones as Array<any>).map(
-                        (telefone, index) => (
-                          <div key={index} className="flex items-center gap-2">
-                            <span className="text-primary">•</span>
-                            <span>{telefone.telefoneComDDD}</span>
-                            <span className="text-muted-foreground">
-                              ({telefone.operadora})
+                      {cadastroPessoaFisica.telefones.map((telefone, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <span className="text-primary">•</span>
+                          <span>{telefone.telefoneComDDD}</span>
+                          <span className="text-muted-foreground">
+                            ({telefone.operadora})
+                          </span>
+                          {telefone.whatsApp && (
+                            <span className="text-green-600 font-medium ml-auto">
+                              WhatsApp
                             </span>
-                            {telefone.whatsApp && (
-                              <span className="text-green-600 font-medium ml-auto">
-                                WhatsApp
-                              </span>
-                            )}
-                          </div>
-                        )
-                      )}
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
 
                 {/* Endereços */}
-                {(pessoaFisica.enderecos as Array<any>)?.length > 0 && (
+                {cadastroPessoaFisica.enderecos?.length > 0 && (
                   <div className="bg-muted p-4 rounded-xl shadow-sm">
                     <h3 className="font-semibold mb-2">Endereço</h3>
                     <div className="space-y-3 text-sm">
-                      {(pessoaFisica.enderecos as Array<any>).map(
-                        (endereco, index) => (
-                          <div key={index} className="space-y-1">
-                            <p>
-                              {endereco.logradouro}, {endereco.numero}
-                            </p>
-                            <p className="text-muted-foreground">
-                              {endereco.complemento}
-                            </p>
-                            <p className="text-muted-foreground">
-                              {endereco.bairro}, {endereco.cidade} -{" "}
-                              {endereco.uf}
-                            </p>
-                            <p className="text-muted-foreground">
-                              CEP: {endereco.cep}
-                            </p>
-                          </div>
-                        )
-                      )}
+                      {cadastroPessoaFisica.enderecos.map((endereco, index) => (
+                        <div key={index} className="space-y-1">
+                          <p>
+                            {endereco.logradouro}, {endereco.numero}
+                          </p>
+                          <p className="text-muted-foreground">
+                            {endereco.complemento}
+                          </p>
+                          <p className="text-muted-foreground">
+                            {endereco.bairro}, {endereco.cidade} - {endereco.uf}
+                          </p>
+                          <p className="text-muted-foreground">
+                            CEP: {endereco.cep}
+                          </p>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
 
                 {/* Emails */}
-                {(pessoaFisica.emails as Array<any>)?.length > 0 && (
+                {cadastroPessoaFisica.emails?.length > 0 && (
                   <div className="bg-muted p-4 rounded-xl shadow-sm">
                     <h3 className="font-semibold mb-2">Emails</h3>
                     <div className="space-y-1 text-sm">
-                      {(pessoaFisica.emails as Array<any>).map(
-                        (email, index) => (
-                          <p key={index} className="text-foreground">
-                            {email.enderecoEmail}
-                          </p>
-                        )
-                      )}
+                      {cadastroPessoaFisica.emails.map((email, index) => (
+                        <p key={index} className="text-foreground">
+                          {email.enderecoEmail}
+                        </p>
+                      ))}
                     </div>
                   </div>
                 )}
