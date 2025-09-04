@@ -8,7 +8,9 @@ import {
   Moon,
   Sun,
 } from "lucide-react";
+
 import { useTheme } from "next-themes";
+import { redirect } from "next/navigation";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -27,8 +29,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-import { signoutAction } from "@/app/(auth)/(signout)/signoutAction";
-import { redirect } from "next/navigation";
+import { signoutAction } from "@/app/(pages)/(auth)/(signout)/signoutAction";
 
 interface NavUserProps {
   user: {

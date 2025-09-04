@@ -5,7 +5,6 @@ import * as React from "react";
 
 import { User } from "@prisma/client";
 
-import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
@@ -18,6 +17,8 @@ import {
 } from "@/components/ui/sidebar";
 
 import { sidebarMenu } from "@/lib/configs";
+
+import { NavMain } from "./nav-main";
 
 interface Props extends React.ComponentProps<typeof Sidebar> {
   user: User | undefined;
@@ -45,17 +46,15 @@ export function AppSidebar({ user, ...props }: Props) {
       </SidebarHeader>
 
       <SidebarContent>
-        <NavProjects projects={sidebarMenu.projects} />
-        {/* <NavMain items={sidebarMenu.navMain} /> */}
-        {/* <NavSecondary items={sidebarMenu.navSecondary} className="mt-auto" /> */}
+        <NavMain items={sidebarMenu.navMain} />
       </SidebarContent>
 
       <SidebarFooter>
         <NavUser
           user={{
-            name: user?.name ?? sidebarMenu.user.name,
-            email: user?.email ?? sidebarMenu.user.email,
-            avatar: sidebarMenu.user.avatar,
+            name: user?.name ?? "shadcn",
+            email: user?.email ?? "m@example.com",
+            avatar: "/avatars/shadcn.jpg",
           }}
         />
       </SidebarFooter>

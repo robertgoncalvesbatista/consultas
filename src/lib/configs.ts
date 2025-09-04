@@ -1,58 +1,27 @@
-import {
-  BookOpen,
-  Bot,
-  LifeBuoy,
-  Send,
-  Settings2,
-  SquareTerminal,
-  User,
-} from "lucide-react";
+import { BookOpen, Bot, LifeBuoy, Send, Settings2, User } from "lucide-react";
 
 export const sidebarMenu = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
-      title: "Playground",
+      title: "Cadastro Pessoa Física",
       url: "#",
-      icon: SquareTerminal,
+      icon: User,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Basic",
+          url: "/cadastro-pessoa-fisica/basic",
         },
         {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
+          title: "Plus",
+          url: "/cadastro-pessoa-fisica/plus",
         },
       ],
     },
     {
       title: "Models",
-      url: "#",
+      url: "/bla-bla-bla",
       icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
     },
     {
       title: "Documentation",
@@ -111,13 +80,6 @@ export const sidebarMenu = {
       title: "Feedback",
       url: "#",
       icon: Send,
-    },
-  ],
-  projects: [
-    {
-      name: "Cadastro Pessoa Física",
-      url: "/cadastro-pessoa-fisica",
-      icon: User,
     },
   ],
 };

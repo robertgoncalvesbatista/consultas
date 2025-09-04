@@ -1,8 +1,7 @@
 import { CadastroPessoaFisicaBasico } from "@prisma/client";
-
 import BaseDTO from "./base";
 
-class CadastroPessoaFisicaBasicoBasicoDTO extends BaseDTO {
+export default class CadastroPessoaFisicaBasicoBasicoDTO extends BaseDTO {
   constructor(public readonly dto: CadastroPessoaFisicaBasico) {
     super(dto);
   }
@@ -11,8 +10,6 @@ class CadastroPessoaFisicaBasicoBasicoDTO extends BaseDTO {
     return this.dto;
   }
 }
-
-export default CadastroPessoaFisicaBasicoBasicoDTO;
 
 export type TTelefone = {
   telefoneComDDD: string;

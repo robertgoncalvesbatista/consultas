@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { signinAction } from "@/app/(auth)/signin/signin.action";
+import { signinAction } from "@/app/(pages)/(auth)/signin/signin.action";
 import { cn } from "@/lib/utils";
 
 import { signinValidation, SigninValidator } from "./signin.validation";
