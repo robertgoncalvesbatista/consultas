@@ -27,7 +27,7 @@ export default function Loading() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/dashboard">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/web/dashboard">Home</BreadcrumbLink>
               </BreadcrumbItem>
 
               <BreadcrumbSeparator />

@@ -1,5 +1,3 @@
-import { redirect } from "next/navigation";
-
 import { auth } from "@/auth";
 
 import { AppSidebar } from "@/components/app-sidebar";
@@ -24,10 +22,6 @@ type Props = Readonly<{
 async function PagesLayout({ children }: Props) {
   const session = await auth();
 
-  if (!session) {
-    redirect("/signin");
-  }
-
   return (
     <SidebarProvider>
       <AppSidebar user={session?.user} />
@@ -45,7 +39,7 @@ async function PagesLayout({ children }: Props) {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="/dashboard">Home</BreadcrumbLink>
+                  <BreadcrumbLink href="/web/dashboard">Home</BreadcrumbLink>
                 </BreadcrumbItem>
 
                 {/* <BreadcrumbSeparator />

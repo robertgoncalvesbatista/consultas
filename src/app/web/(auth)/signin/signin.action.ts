@@ -12,15 +12,11 @@ export async function signinAction(data: SigninValidator) {
       email: data.email,
       password: data.password,
       redirect: true,
-      redirectTo: "/dashboard",
+      redirectTo: "/web/dashboard",
     });
   } catch (error: any) {
     if (isRedirectError(error)) {
-      throw {
-        name: error.name,
-        message: error.message,
-        stack: error.stack,
-      };
+      throw error;
     }
 
     if (error.type === "CredentialsSignin") {

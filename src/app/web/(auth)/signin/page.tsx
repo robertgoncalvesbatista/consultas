@@ -1,4 +1,4 @@
-import { SigninForm } from "@/app/(pages)/(auth)/signin/signin-form";
+import { SigninForm } from "@/app/web/(auth)/signin/signin-form";
 
 function Page() {
   return (

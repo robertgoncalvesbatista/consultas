@@ -6,7 +6,7 @@ export async function useSession() {
   const session = await auth();
 
   if (!session) {
-    redirect("/signin");
+    redirect("/web/signin");
   }
 
   return { session };

@@ -16,6 +16,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Senha", type: "password" },
       },
       authorize: async (credentials: { email: string; password: string }) => {
+        console.log("oi");
+
         const user = await db.user.findFirst({
           where: { email: credentials.email },
         });

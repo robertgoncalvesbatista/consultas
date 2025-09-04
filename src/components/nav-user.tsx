@@ -29,7 +29,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-import { signoutAction } from "@/app/(pages)/(auth)/(signout)/signoutAction";
+import { signoutAction } from "@/app/web/(auth)/(signout)/signout-action";
 
 interface NavUserProps {
   user: {

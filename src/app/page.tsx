@@ -59,14 +59,14 @@ export default function HomePage() {
               variant="ghost"
               className="hover:bg-muted transition-all duration-300"
             >
-              <a href="/signin">Entrar</a>
+              <a href="/web/signin">Entrar</a>
             </Button>
 
             <Button
               asChild
               className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
             >
-              <a href="/signup">
+              <a href="/web/signup">
                 <ArrowRight className="w-4 h-4 mr-2" />
                 Registrar-se
               </a>
@@ -108,7 +108,7 @@ export default function HomePage() {
             size="lg"
             className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 px-8 mt-8"
           >
-            <a href="/signup">
+            <a href="/web/signup">
               <Search className="w-5 h-5 mr-2" />
               Registrar-se Grátis
             </a>
@@ -267,7 +267,7 @@ export default function HomePage() {
               size="lg"
               className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 px-8"
             >
-              <a href="/signup">
+              <a href="/web/signup">
                 <Star className="w-5 h-5 mr-2" />
                 Criar Conta Gratuita
               </a>

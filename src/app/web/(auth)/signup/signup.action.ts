@@ -45,5 +45,5 @@ export async function signupAction(data: SignupValidator) {
     },
   });
 
-  return redirect("/signin");
+  return redirect("/web/signin");
 }

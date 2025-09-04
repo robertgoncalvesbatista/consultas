@@ -27,7 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/(pages)/(services)/cadastro-pessoa-fisica/validation.ts"
+    "src/app/web/(services)/cadastro-pessoa-fisica/validation.ts"
   ],
   "exclude": ["node_modules"]
 }
